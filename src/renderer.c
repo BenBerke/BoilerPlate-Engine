@@ -79,18 +79,18 @@ bool r_update_window_win() {
 
 #endif
 
-bool r_g_poll_events() {
+bool bp_r_poll_events() {
 #ifdef _WIN32
     return r_poll_events_win();
 #endif
 }
 
-void r_g_init_window(const int w, const int h, const char* title) {
+void bp_r_init_window(const int w, const int h, const char* title) {
 #ifdef _WIN32
 r_init_win(w, h, title);
 #endif
 }
-void r_g_update_window() {
+void bp_r_update_window() {
 #ifdef _WIN32
     r_update_window_win();
 #endif
@@ -109,7 +109,7 @@ void r_draw_line(int x, int y, const int x1, const int y1) {
     int err = dx - dy;
 
     for (;;) {
-        r_set_pixel(x, y);
+        bp_r_set_pixel(x, y);
 
         if (x == x1 && y == y1) break;
 

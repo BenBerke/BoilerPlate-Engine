@@ -13,4 +13,8 @@ add_executable(BPengine src/main.c
         headers/input_manager.h
         src/input_manager.c
         headers/config.h
+        headers/debug.h
+        src/debug.c
+        src/time.c
+        headers/time.h
 )

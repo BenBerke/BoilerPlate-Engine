@@ -17,23 +17,23 @@ static bool* im_memory = NULL;
 #define IM_CURRENT (IM_KEYS_PTR[keycode])
 #define IM_PREVIOUS (IM_LAST_KEYS_PTR[keycode])
 
-void im_init() {  //                                       mouse x, y
+void bp_im_init() {  //                                       mouse x, y
     SIZE_T total_size = sizeof(bool) * (IM_KEY_COUNT * 2) + 8;
 
     im_memory = malloc(total_size);
 
     memset(im_memory, 0, total_size);
 }
-void im_begin() {
+void bp_im_begin() {
     memcpy(IM_LAST_KEYS_PTR, IM_KEYS_PTR, sizeof(bool) * IM_KEY_COUNT);
 }
 
-bool im_key_get(const enum KEYCODES keycode) { return (IM_CURRENT);}
-bool im_key_get_down(const enum KEYCODES keycode) {return (IM_CURRENT) && !(IM_PREVIOUS);}
-bool im_key_get_up(const enum KEYCODES keycode) {return !(IM_CURRENT) && (IM_PREVIOUS);}
+bool bp_im_key_get(const enum KEYCODES keycode) { return (IM_CURRENT);}
+bool bp_im_key_get_down(const enum KEYCODES keycode) {return (IM_CURRENT) && !(IM_PREVIOUS);}
+bool bp_im_key_get_up(const enum KEYCODES keycode) {return !(IM_CURRENT) && (IM_PREVIOUS);}
 
-unsigned int im_mouse_pos_x() { return *(unsigned int*)(IM_MOUSE_POS_PTR);}
-unsigned int im_mouse_pos_y() { return *(unsigned int*)(IM_MOUSE_POS_PTR + sizeof(unsigned int)); }
+unsigned int bp_im_mouse_pos_x() { return *(unsigned int*)(IM_MOUSE_POS_PTR);}
+unsigned int bp_im_mouse_pos_y() { return *(unsigned int*)(IM_MOUSE_POS_PTR + sizeof(unsigned int)); }
 
 #ifdef _WIN32
 LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam) {

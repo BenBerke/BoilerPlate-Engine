@@ -1,8 +1,18 @@
-#include <stdio.h>
-
 #include "bpengine.h"
 
 int main(void) {
-    printf("Hello World!\n");
+    bp_r_init_window(W_W, W_H, "Test");
+
+    bp_im_init();
+
+    while (bp_r_poll_events()) {
+        bp_im_begin();
+
+        bp_r_set_draw_color(255, 255, 255);
+        bp_r_clear_window();
+
+        bp_r_update_window();
+    }
+
     return 0;
 }

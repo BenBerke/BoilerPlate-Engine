@@ -50,15 +50,15 @@ enum KEYCODES {
     KC_SPACE = ' ',
 };
 
-void im_init();
-void im_begin();
+void bp_im_init();
+void bp_im_begin();
 
-bool im_key_get(enum KEYCODES keycode);
-bool im_key_get_down(enum KEYCODES keycode);
-bool im_key_get_up(enum KEYCODES keycode);
+bool bp_im_key_get(enum KEYCODES keycode);
+bool bp_im_key_get_down(enum KEYCODES keycode);
+bool bp_im_key_get_up(enum KEYCODES keycode);
 
-unsigned int im_mouse_pos_x();
-unsigned int im_mouse_pos_y();
+unsigned int bp_im_mouse_pos_x();
+unsigned int bp_im_mouse_pos_y();
 
 
 #endif //BPENGINE_INPUTMANAGER_H
