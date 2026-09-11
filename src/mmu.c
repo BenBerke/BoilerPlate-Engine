@@ -18,7 +18,10 @@ void bp_mmu_init(const unsigned long long _size) {
 
 #ifndef BP_NO_WINDOW
     if (_size <= 520 + table_size) {
-        print("[BPE MMU WARNING] BP Engine needs at least %d bytes of memory and enough space for metadata", 520 + BP_SCREEN_BUFFER_SIZE);
+        print("[BPE MMU WARNING] Not enough memory for the engine to run. Required memory (in bytes): \n"
+              "Input Manager: 520 \n"
+              "Screen buffer: {window width * window height * 4}\n"
+              "Memory Management Unit Metadata: {Allocated memory / 8}\n");
         return;
     }
 #else

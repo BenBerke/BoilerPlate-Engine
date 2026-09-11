@@ -35,6 +35,11 @@ static inline void bpe_init(
     bp_im_init();
 #endif
 }
+
+static inline bool bpe_update() {
+    bp_im_begin();
+    return bp_r_poll_events();
+}
 #endif
 
 #endif //BPENGINE_BPENGINE_H

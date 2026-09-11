@@ -5,14 +5,14 @@ int main(void) {
 
     bool running = true;
     while (running) {
-        bp_im_begin();
-
-        running = bp_r_poll_events();
+        running = bpe_update();
 
         bp_r_set_draw_color(255, 255, 255);
         bp_r_clear_window();
 
         bp_r_update_window();
+
+        // Draw something here
     }
 
     return 0;

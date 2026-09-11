@@ -8,6 +8,7 @@ int w_w, w_h;
 
 #ifdef _WIN32
 DWORD* screen_buffer;
+static HWND r_HWND = NULL;
 #endif
 
 #ifdef _WIN32
@@ -37,7 +38,7 @@ int r_init_win(const char* title, const unsigned long window_flags) {
 
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-    HWND hwnd = CreateWindowEx(
+    r_HWND = CreateWindowEx(
       0, CLASS_NAME, wTitle,
       window_flags,
       CW_USEDEFAULT, CW_USEDEFAULT,
@@ -45,10 +46,10 @@ int r_init_win(const char* title, const unsigned long window_flags) {
       NULL, NULL, hInstance, NULL
     );
 
-    if (hwnd == NULL) return 0;
+    if (r_HWND == NULL) return 0;
 
-    ShowWindow(hwnd, SW_SHOW);
-    UpdateWindow(hwnd);
+    ShowWindow(r_HWND, SW_SHOW);
+    UpdateWindow(r_HWND);
 
     return 1;
 }
@@ -67,13 +68,10 @@ bool r_poll_events_win() {
 }
 
 bool r_update_window_win() {
-    HWND hwnd = NULL;
-
-    EnumThreadWindows(GetCurrentThreadId(), GetThreadWindowsCallBack, (LPARAM)&hwnd);
-    if (hwnd != NULL) {
-        ShowWindow(hwnd, SW_SHOW);
-        InvalidateRect(hwnd, NULL, FALSE);
-        UpdateWindow(hwnd);
+    if (r_HWND != NULL) {
+        ShowWindow(r_HWND, SW_SHOW);
+        InvalidateRect(r_HWND, NULL, FALSE);
+        UpdateWindow(r_HWND);
 
         return true;
     }
