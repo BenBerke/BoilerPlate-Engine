@@ -11,8 +11,6 @@ int main(void) {
         bp_r_clear_window();
 
         bp_r_update_window();
-
-        // Draw something here
     }
 
     return 0;

@@ -20,6 +20,13 @@
 #define BP_SF_VISIBLE WS_VISIBLE
 #endif
 
+typedef struct Texture {
+    u32 *data;
+    u32 w, h;
+} Texture;
+
+Texture png_to_bitstream(const char* filepath);
+
 static int draw_color;
 
 // r at the highest 8, b at the lowest 8
