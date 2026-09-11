@@ -16,7 +16,7 @@ BOOL CALLBACK GetThreadWindowsCallBack(HWND hwnd, LPARAM lParam) {
     return FALSE;
 }
 
-int r_init_win(const char* title) {
+int r_init_win(const char* title, const unsigned long window_flags) {
     // Fetch HINSTANCE automatically
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -39,7 +39,7 @@ int r_init_win(const char* title) {
 
     HWND hwnd = CreateWindowEx(
       0, CLASS_NAME, wTitle,
-      WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_THICKFRAME | WS_MAXIMIZEBOX,
+      window_flags,
       CW_USEDEFAULT, CW_USEDEFAULT,
       rc.right - rc.left, rc.bottom - rc.top,
       NULL, NULL, hInstance, NULL
@@ -89,13 +89,13 @@ bool bp_r_poll_events() {
 #endif
 }
 
-void bp_r_init_window(const int w, const int h, const char* title) {
+void bp_r_init_window(const int w, const int h, const char* title, const unsigned long window_flags) {
     w_w = w;
     w_h = h;
     //todo custom malloc
 #ifdef _WIN32
     screen_buffer = malloc(BP_SCREEN_BUFFER_SIZE * sizeof(DWORD));
-    r_init_win(title);
+    r_init_win(title, window_flags);
 #endif
 }
 void bp_r_update_window() {

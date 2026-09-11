@@ -9,7 +9,16 @@
 #include "typedefs.h"
 #include "config.h"
 
-#define W_PIXEL_COUNT (W_W * W_H)
+#ifdef _WIN32
+#define BP_SF_DEFAULT WS_OVERLAPPEDWINDOW
+#define BP_SF_BORDERLESS WS_POPUP
+#define BP_SF_RESIZABLE WS_THICKFRAME
+#define BP_SF_TITLE WS_CAPTION
+#define BP_SF_MINIMIZABLE WS_MINIMIZEBOX
+#define BP_SF_MAXIMIZABLE WS_MAXIMIZEBOX
+#define BP_SF_SYSMENU WS_SYSMENU
+#define BP_SF_VISIBLE WS_VISIBLE
+#endif
 
 static int draw_color;
 
@@ -30,7 +39,7 @@ static inline void bp_r_set_draw_color_int(const int color) {
     draw_color = color;
 }
 
-void bp_r_init_window(int w, int h, const char* title);
+void bp_r_init_window(int w, int h, const char* title, unsigned long window_flags);
 bool bp_r_poll_events();
 void bp_r_update_window();
 

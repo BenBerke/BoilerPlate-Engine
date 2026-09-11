@@ -21,6 +21,8 @@ typedef unsigned char bool;
 #endif
 #endif
 
+#define NONE 0
+
 #ifdef _WIN32
 typedef signed char i8;
 typedef unsigned char u8;

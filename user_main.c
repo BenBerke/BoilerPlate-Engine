@@ -1,7 +1,7 @@
 #include "bpengine.h"
 
 int main(void) {
-    bp_r_init_window(1, 1, "Test");
+    bp_r_init_window(960, 600, "Test", BP_SF_DEFAULT);
 
     bp_im_init();
 
