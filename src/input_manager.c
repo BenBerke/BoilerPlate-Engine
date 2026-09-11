@@ -7,7 +7,7 @@
 #include "../headers/typedefs.h"
 #include "../headers/config.h"
 
-static bool* im_memory = NULL;
+static bool* im_memory = null;
 
 #define IM_KEY_COUNT 256
 #define IM_KEYS_PTR (im_memory)
@@ -17,7 +17,7 @@ static bool* im_memory = NULL;
 #define IM_CURRENT (IM_KEYS_PTR[keycode])
 #define IM_PREVIOUS (IM_LAST_KEYS_PTR[keycode])
 
-void bp_im_init() {  //                                       mouse x, y
+void bp_im_init() {  //                 mouse x, y
     SIZE_T total_size = sizeof(bool) * (IM_KEY_COUNT * 2) + 8;
 
     im_memory = malloc(total_size);
@@ -72,8 +72,8 @@ LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wPara
 
             BITMAPINFO bmi = {};
             bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-            bmi.bmiHeader.biWidth = W_W;
-            bmi.bmiHeader.biHeight = -W_H;
+            bmi.bmiHeader.biWidth = w_w;
+            bmi.bmiHeader.biHeight = -w_h;
             bmi.bmiHeader.biPlanes = 1;
             bmi.bmiHeader.biBitCount = 32;
             bmi.bmiHeader.biCompression = BI_BITFIELDS;
@@ -84,8 +84,8 @@ LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wPara
 
             StretchDIBits(
                 hdc,
-                0, 0, W_W, W_H,
-                0, 0, W_W, W_H,
+                0, 0, w_w, w_h,
+                0, 0, w_w, w_h,
                 screen_buffer, &bmi,
                 DIB_RGB_COLORS, SRCCOPY
             );

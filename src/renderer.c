@@ -4,7 +4,11 @@
 
 #include "../headers/renderer.h"
 
-DWORD screen_buffer[W_W * W_H];
+int w_w, w_h;
+
+#ifdef _WIN32
+DWORD* screen_buffer;
+#endif
 
 #ifdef _WIN32
 BOOL CALLBACK GetThreadWindowsCallBack(HWND hwnd, LPARAM lParam) {
@@ -12,7 +16,7 @@ BOOL CALLBACK GetThreadWindowsCallBack(HWND hwnd, LPARAM lParam) {
     return FALSE;
 }
 
-int r_init_win(const int w, const int h, const char* title) {
+int r_init_win(const char* title) {
     // Fetch HINSTANCE automatically
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
@@ -29,7 +33,7 @@ int r_init_win(const int w, const int h, const char* title) {
 
     if (!RegisterClassEx(&wc)) return 0;
 
-    RECT rc = {0, 0, W_W, W_H};
+    RECT rc = {0, 0, w_w, w_h};
 
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -86,8 +90,12 @@ bool bp_r_poll_events() {
 }
 
 void bp_r_init_window(const int w, const int h, const char* title) {
+    w_w = w;
+    w_h = h;
+    //todo custom malloc
+    screen_buffer = malloc(BP_SCREEN_BUFFER_SIZE);
 #ifdef _WIN32
-r_init_win(w, h, title);
+    r_init_win(title);
 #endif
 }
 void bp_r_update_window() {

@@ -21,7 +21,7 @@ static inline void r_int_to_rgb(const unsigned int i, unsigned char* r, unsigned
     *g = (i & 0x00FF0000) >> 16;
     *b = (i & 0x0000FF00) >> 8;
 }
-static inline int cord_to_index(const int x, const int y) {return x + y * W_W;}
+static inline int cord_to_index(const int x, const int y) {return x + y * w_w;}
 
 static inline void bp_r_set_draw_color(const unsigned char r, const unsigned char g, const unsigned char b) {
     draw_color = r_rgb_to_int(r, g, b);
@@ -36,7 +36,7 @@ void bp_r_update_window();
 
 static inline void bp_r_clear_window() {
 #ifdef _WIN32
-    __stosd((unsigned long*)screen_buffer, draw_color, W_PIXEL_COUNT);
+    __stosd((unsigned long*)screen_buffer, draw_color, BP_SCREEN_BUFFER_SIZE);
 #endif
 
 }
@@ -45,7 +45,7 @@ static inline void bp_r_clear_window() {
 // Draw Functions
 // ==============
 static inline void bp_r_set_pixel(const int x, const int y) {
-    if (x < 0 || x >= W_W || y < 0 || y >= W_H) return;
+    if (x < 0 || x >= w_w || y < 0 || y >= w_h) return;
     screen_buffer[cord_to_index(x, y)] = draw_color;
 }
 

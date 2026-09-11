@@ -5,11 +5,11 @@
 #ifndef BPENGINE_GLOBALS_H
 #define BPENGINE_GLOBALS_H
 
-#define W_W 960
-#define W_H 960
+extern int w_w, w_h;
+#define BP_SCREEN_BUFFER_SIZE (w_w * w_h)
 
 #ifdef _WIN32
-extern DWORD screen_buffer[W_W * W_H];
+extern DWORD* screen_buffer;
 #endif
 
 #endif //BPENGINE_GLOBALS_H
