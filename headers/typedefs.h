@@ -8,6 +8,7 @@
 #ifndef BP_NO_TYPDEFS
 
 typedef unsigned char bool;
+typedef unsigned char byte;
 #define true 1
 #define false 0
 

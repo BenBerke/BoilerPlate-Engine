@@ -17,4 +17,6 @@ add_executable(BPengine src/main.c
         src/debug.c
         src/time.c
         headers/time.h
+        headers/mmu.h
+        src/mmu.c
 )

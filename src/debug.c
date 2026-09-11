@@ -10,7 +10,7 @@ void print(const char* text, ...) {
     va_start(args, text);
 
     int i = 0;
-    char buffer[256];
+    char buffer[512];
     int buffer_stack = 0;
 
     while (text[i] != '\0') {
@@ -32,6 +32,13 @@ void print(const char* text, ...) {
                 int j = 0;
                 while (num_buffer[j] != '\0' && buffer_stack < sizeof(buffer)-1) buffer[buffer_stack++] = num_buffer[j++];
             }
+            else if (text[i] == 'b') {
+                const char val = (char)va_arg(args, int);
+                const char* result = val ? "true" : "false";
+                int j = 0;
+                while (result[j] != '\0' && buffer_stack < sizeof(buffer)-1) buffer[buffer_stack++] = result[j++];
+            }
+
             else if (text[i] == '%') buffer[buffer_stack++] = '%';
 
             i++;

@@ -7,7 +7,7 @@
 
 #include "typedefs.h"
 
-enum KEYCODES {
+typedef enum KEYCODES {
     KC_A = 'A',
     KC_B = 'B',
     KC_C = 'C',
@@ -48,7 +48,7 @@ enum KEYCODES {
 
     KC_ESC = 27,
     KC_SPACE = ' ',
-};
+} KEYCODES;
 
 void bp_im_init();
 void bp_im_begin();

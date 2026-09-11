@@ -6,34 +6,43 @@
 #include "../headers/input_manager.h"
 #include "../headers/typedefs.h"
 #include "../headers/config.h"
+#include "../headers/mmu.h"
 
-static bool* im_memory = null;
+static bp_ptr im_memory = {null, ~0};
 
 #define IM_KEY_COUNT 256
-#define IM_KEYS_PTR (im_memory)
-#define IM_LAST_KEYS_PTR (im_memory + IM_KEY_COUNT)
-#define IM_MOUSE_POS_PTR (im_memory + (IM_KEY_COUNT * 2))
 
-#define IM_CURRENT (IM_KEYS_PTR[keycode])
-#define IM_PREVIOUS (IM_LAST_KEYS_PTR[keycode])
+#define IM_KEYS_SIZE (sizeof(bool) * IM_KEY_COUNT)
+#define IM_LAST_KEYS_SIZE IM_KEYS_SIZE
+#define IM_MOUSE_POS_SIZE (sizeof(unsigned int) * 2)
 
-void bp_im_init() {  //                 mouse x, y
-    SIZE_T total_size = sizeof(bool) * (IM_KEY_COUNT * 2) + 8;
+#define IM_LAST_KEYS_OFFSET (IM_KEYS_SIZE)
+#define IM_MOUSE_POS_OFFSET (IM_KEYS_SIZE + IM_LAST_KEYS_SIZE)
+#define TOTAL_SIZE (IM_KEYS_SIZE + IM_LAST_KEYS_SIZE + IM_MOUSE_POS_SIZE)
 
-    im_memory = malloc(total_size);
+#define GET_KEY (bp_keys()[(int)(keycode)])
+#define GET_KEY_LAST (bp_last_keys()[(int)(keycode)])
 
-    memset(im_memory, 0, total_size);
+static bool* bp_keys(void) { return (bool*)im_memory.ptr;}
+static bool* bp_last_keys(void) { return (bool*)((byte*)im_memory.ptr + IM_LAST_KEYS_OFFSET); }
+static unsigned int* bp_mouse_pos(void) { return (unsigned int*)((byte*)im_memory.ptr + IM_MOUSE_POS_OFFSET); }
+
+void bp_im_init() {
+    im_memory = bp_malloc(TOTAL_SIZE);
+    bp_memset(&im_memory, 0, TOTAL_SIZE);
 }
 void bp_im_begin() {
-    memcpy(IM_LAST_KEYS_PTR, IM_KEYS_PTR, sizeof(bool) * IM_KEY_COUNT);
+    bp_ptr current_keys = {.ptr = bp_keys(), .size = IM_KEYS_SIZE};
+    bp_ptr last_keys = {.ptr = bp_last_keys(), .size = IM_LAST_KEYS_SIZE};
+    bp_memcpy(&last_keys, &current_keys, IM_KEYS_SIZE);
 }
 
-bool bp_im_key_get(const enum KEYCODES keycode) { return (IM_CURRENT);}
-bool bp_im_key_get_down(const enum KEYCODES keycode) {return (IM_CURRENT) && !(IM_PREVIOUS);}
-bool bp_im_key_get_up(const enum KEYCODES keycode) {return !(IM_CURRENT) && (IM_PREVIOUS);}
+bool bp_im_key_get(const KEYCODES keycode) { return GET_KEY; }
+bool bp_im_key_get_down(const KEYCODES keycode) {return (GET_KEY) && !(GET_KEY_LAST);}
+bool bp_im_key_get_up(const KEYCODES keycode) {return !(GET_KEY) && (GET_KEY_LAST);}
 
-unsigned int bp_im_mouse_pos_x() { return *(unsigned int*)(IM_MOUSE_POS_PTR);}
-unsigned int bp_im_mouse_pos_y() { return *(unsigned int*)(IM_MOUSE_POS_PTR + sizeof(unsigned int)); }
+unsigned int bp_im_mouse_pos_x() { return bp_mouse_pos()[0]; }
+unsigned int bp_im_mouse_pos_y() { return bp_mouse_pos()[1]; }
 
 #ifdef _WIN32
 LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam) {
@@ -41,8 +50,9 @@ LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wPara
 
     switch (uMsg) {
         case WM_MOUSEMOVE:
-            *(unsigned int*)(IM_MOUSE_POS_PTR) = (unsigned int)LOWORD(lParam);
-            *(unsigned int*)(IM_MOUSE_POS_PTR + sizeof(unsigned int)) = (unsigned int)HIWORD(lParam);
+            unsigned int* mouse_pos = bp_mouse_pos();
+            mouse_pos[0] = (unsigned int)LOWORD(lParam);
+            mouse_pos[1] = (unsigned int)HIWORD(lParam);
             break;
         case WM_LBUTTONDOWN: {
             unsigned int x = LOWORD(lParam);
@@ -50,15 +60,16 @@ LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wPara
             break;
         }
         case WM_KEYDOWN: {
-            if (im_memory == NULL) break;
-            wKey = (unsigned char) wParam;
-            if (wKey < 256) *(IM_KEYS_PTR + wKey) = true;
+            if (im_memory.ptr == NULL) break;
+            const unsigned int key = (unsigned int)wParam;
+            if (key < IM_KEY_COUNT) bp_keys()[key] = true;
             break;
         }
-        case WM_KEYUP: {
-            if (im_memory == NULL) break;
-            wKey = (unsigned char) wParam;
-            if (wKey < 256) *(IM_KEYS_PTR + wKey) = false;
+        case WM_KEYUP:
+        case WM_SYSKEYUP: {
+            if (im_memory.ptr == NULL) break;
+            const unsigned int key = (unsigned int)wParam;
+            if (key < IM_KEY_COUNT) bp_keys()[key] = false;
             break;
         }
 

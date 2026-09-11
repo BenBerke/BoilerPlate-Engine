@@ -6,5 +6,4 @@ int user_main();
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     user_main();
 }
-
 #endif // _WIN32

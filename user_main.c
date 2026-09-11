@@ -1,12 +1,13 @@
 #include "bpengine.h"
 
 int main(void) {
-    bp_r_init_window(960, 600, "Test", BP_SF_DEFAULT);
+    bpe_init(960, 600, "BoilerPlate2D", BP_SF_DEFAULT, 4096);
 
-    bp_im_init();
-
-    while (bp_r_poll_events()) {
+    bool running = true;
+    while (running) {
         bp_im_begin();
+
+        running = bp_r_poll_events();
 
         bp_r_set_draw_color(255, 255, 255);
         bp_r_clear_window();
