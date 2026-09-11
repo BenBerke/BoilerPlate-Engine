@@ -93,6 +93,15 @@ LRESULT CALLBACK WindowProc(const HWND hWnd, const UINT uMsg, const WPARAM wPara
             EndPaint(hWnd, &ps);
             return 0;
             break;
+        case WM_SIZE:
+            w_w = LOWORD(lParam);
+            w_h = HIWORD(lParam);
+
+            if (w_w == 0 || w_h == 0) break;
+            if (screen_buffer != NULL) free(screen_buffer);
+            screen_buffer = malloc(BP_SCREEN_BUFFER_SIZE * sizeof(DWORD));
+            memset(screen_buffer, 0, BP_SCREEN_BUFFER_SIZE * sizeof(DWORD));
+            break;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);

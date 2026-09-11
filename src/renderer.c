@@ -39,7 +39,7 @@ int r_init_win(const char* title) {
 
     HWND hwnd = CreateWindowEx(
       0, CLASS_NAME, wTitle,
-      WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+      WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_THICKFRAME | WS_MAXIMIZEBOX,
       CW_USEDEFAULT, CW_USEDEFAULT,
       rc.right - rc.left, rc.bottom - rc.top,
       NULL, NULL, hInstance, NULL
@@ -93,8 +93,8 @@ void bp_r_init_window(const int w, const int h, const char* title) {
     w_w = w;
     w_h = h;
     //todo custom malloc
-    screen_buffer = malloc(BP_SCREEN_BUFFER_SIZE);
 #ifdef _WIN32
+    screen_buffer = malloc(BP_SCREEN_BUFFER_SIZE * sizeof(DWORD));
     r_init_win(title);
 #endif
 }
